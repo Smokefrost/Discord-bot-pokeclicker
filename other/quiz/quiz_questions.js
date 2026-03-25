@@ -1192,6 +1192,32 @@ const whichBerryFromWanderer = () => {
   };
 };
 
+const whichPokeball = () => {
+
+  const pokeball = randomFromArray(Object.keys(GameConstants.Pokeball).filter(ball => Number(ball) >= 1).map(ball => GameConstants.Pokeball[ball])).replace(/ball$/i, '');
+  const pokeballImg = encodeURI(`${website}assets/images/items/pokeball/${pokeball}ball.png`);
+
+  const answer = new RegExp(`^\\W*#?${pokeball}.?(ball)?\\b`, 'i');
+
+  const amount = getAmount();
+
+  const description = ['how well do you know your balls?'];
+  description.push(`**+${amount} ${serverIcons.money}**`);
+
+  const embed = new EmbedBuilder()
+    .setTitle('which ball?')
+    .setDescription(description.join('\n'))
+    .setThumbnail(pokeballImg)
+    .setColor('#3498db');
+
+  return {
+    embed,
+    answer,
+    amount,
+    end: defaultEndFunction(`It's the ${pokeball}ball!`, pokeballImg),
+  };
+};
+
 class WeightedOption {
   constructor(option, weight) {
     this.option = option;
@@ -1235,6 +1261,7 @@ const quizTypes = [
   new WeightedOption(effectiveType, 35),
   new WeightedOption(whichWandererFromBerry, 10),
   new WeightedOption(whichBerryFromWanderer, 10),
+  new WeightedOption(whichPokeball, 500000),
   // new WeightedOption(___, 1),
 ];
 
